@@ -24,7 +24,7 @@ class Board(tuple):
 
         else: #Indicate that the cell is not visible
 
-
+            #TODO - Part needs to be needed
     def __str__(self):
         board_string = ''' This string tells us how many mines are remaining '''
         for (row_id, row) in enumerate(self):
@@ -77,6 +77,7 @@ class Board(tuple):
     def is_solved(self):
         '''Return the solution to the board. Reveal all the cells and whether or not they are a mine'''
 
+        #TODO Need to edit this portion
 def create_board(size, mines):
     board = Board(tuple([tuple([Cell(False) for i in range(size)])
                          for j in range(size)]))

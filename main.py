@@ -60,8 +60,15 @@ class Board(tuple):
 
     def flag(self, row_id, col_id):
         cell = self[row_id][col_id]
-        if not cell.is_visible:
+        if not cell.is_visible and self.remaining_mines > 0:
             cell.flag()
+        elif self.remaining_mines == 0:
+            if cell.is_visible:
+                print("Cannot add flag, cell already visible.")
+            elif cell.is_flagged:
+                cell.flag()
+            else:
+                print("You have already flagged all your mines.")
         else:
             print("Cannot add flag, cell already visible.")
 
@@ -105,7 +112,7 @@ def create_board(size, mines):
     for i in range(mines):
         new_pos = random.choice(available_pos)
         available_pos.remove(new_pos)
-        (row_id, col_id) = (new_pos % size, new_pos // size)
+        (row_id, col_id) = (new_pos // size, new_pos % size)
         board.place_mine(row_id, col_id)
     return board
 
@@ -130,7 +137,7 @@ def get_move(board):
 
 def is_valid(move_input, board):
     if move_input == "H" or (len(move_input) not in (2, 3) or
-                             not move_input[:1].isdigit() or
+                             not move_input[:2].isdigit() or
                              int(move_input[0]) not in range(len(board)) or
                              int(move_input[1]) not in range(len(board))):
         return False
@@ -140,10 +147,10 @@ def is_valid(move_input, board):
 
     return True
 
-
 def main():
-    SIZE = 7
-    MINES = 9
+    SIZE = 10
+    MINES = 10
+    random.seed(6)
     board = create_board(SIZE, MINES)
     print(board)
     while board.is_playing and not board.is_solved:
